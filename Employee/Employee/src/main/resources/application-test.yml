@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employee_db
+    username: postgres
+    password: Soumyajeet
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8083
