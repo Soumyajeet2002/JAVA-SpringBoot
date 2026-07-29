@@ -51,7 +51,7 @@ public class DepartmentController {
     }
 
     // UPDATE
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponseDto> updateDepartment(
             @PathVariable UUID id,
             @RequestBody DepartmentRequestDto requestDto) {

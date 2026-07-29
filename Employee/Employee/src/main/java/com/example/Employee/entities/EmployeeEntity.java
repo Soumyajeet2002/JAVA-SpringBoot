@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +44,13 @@ public class EmployeeEntity {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
+    @OneToMany(
+            mappedBy = "employee",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<EmployeeDocument> documents = new ArrayList<>();
+
     private String managerName;
 
     private LocalDate dateOfBirth;
@@ -66,7 +75,6 @@ public class EmployeeEntity {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
 
 
     @PrePersist

@@ -38,11 +38,11 @@ public class EmployeeController {
 
     // READ ALL
     @GetMapping
-    public ResponseEntity<Page<EmployeeResponseDto>> getAllEmployees() {
+    public Page<EmployeeResponseDto> getAllEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(
-                employeeService.getAllEmployees()
-        );
+        return employeeService.getAllEmployees(page, size);
     }
 
     // READ BY ID
@@ -56,7 +56,7 @@ public class EmployeeController {
     }
 
     // UPDATE
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponseDto> updateEmployee(
             @PathVariable UUID id,
             @RequestBody EmployeeRequestDto requestDto) {
