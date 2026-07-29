@@ -9,9 +9,11 @@ import com.example.Employee.mapper.EmployeeMapper;
 import com.example.Employee.repository.DepartmentRepository;
 import com.example.Employee.repository.EmployeeRepository;
 import com.example.Employee.service.EmployeeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -67,25 +69,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-    @Override
-    public List<EmployeeResponseDto> getAllEmployees() {
-
-        return employeeRepository.findAll()
-                .stream()
-                .map(employeeMapper::toResponseDto)
-                .toList();
-    }
-
 //    @Override
-//    public Page<EmployeeResponseDto> getAllEmployees(int page, int size) {
+//    public List<EmployeeResponseDto> getAllEmployees() {
 //
-//        Pageable pageable = PageRequest.of(page, size);
-//
-//        Page<EmployeeEntity> employees =
-//                employeeRepository.findAll(pageable);
-//
-//        return employees.map(employeeMapper::toResponseDto);
+//        return employeeRepository.findAll()
+//                .stream()
+//                .map(employeeMapper::toResponseDto)
+//                .toList();
 //    }
+
+    @Override
+    public Page<EmployeeResponseDto> getAllEmployees(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<EmployeeEntity> employees =
+                employeeRepository.findAll(pageable);
+
+        return employees.map(employeeMapper::toResponseDto);
+    }
 
 
     @Override

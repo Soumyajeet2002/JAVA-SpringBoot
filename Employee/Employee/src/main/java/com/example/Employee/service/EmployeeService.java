@@ -2,8 +2,8 @@ package com.example.Employee.service;
 
 import com.example.Employee.dto.EmployeeRequestDto;
 import com.example.Employee.dto.EmployeeResponseDto;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface EmployeeService {
@@ -12,7 +12,7 @@ public interface EmployeeService {
     EmployeeResponseDto saveEmployee(EmployeeRequestDto employeeRequestDto);
 
     // Get All Employees
-    List<EmployeeResponseDto> getAllEmployees();
+    Page<EmployeeResponseDto> getAllEmployees(int page, int size);
 
     // Get Employee By ID
     EmployeeResponseDto getEmployeeById(UUID id);
