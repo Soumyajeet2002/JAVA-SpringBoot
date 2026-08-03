@@ -30,5 +30,16 @@ jwt:
   secret: 5tPz9Y2Lm8QxR4Ns7UvWk1HaBcDeFgHiJkLmNoPqRsTuVwXyZa123456789ABCDE
   expiration: 86400000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  info:
+    app:
+      name: Employee Management System
+      description: Employee Management API
+      version: 1.0.0
+
 server:
   port: 8085

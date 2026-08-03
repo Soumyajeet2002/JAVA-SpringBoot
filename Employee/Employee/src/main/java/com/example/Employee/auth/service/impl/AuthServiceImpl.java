@@ -6,12 +6,14 @@ import com.example.Employee.auth.dto.RegisterRequestDto;
 import com.example.Employee.auth.dto.RegisterResponseDto;
 import com.example.Employee.auth.service.AuthService;
 import com.example.Employee.entities.UserEntity;
+import com.example.Employee.enums.Role;
 import com.example.Employee.repository.UserRepository;
 import com.example.Employee.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -47,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         // BCrypt hashing happens here
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.setRole(request.getRole());
+        user.setRole(Role.USER);
 
         UserEntity savedUser = userRepository.save(user);
 

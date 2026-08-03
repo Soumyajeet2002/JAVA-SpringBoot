@@ -4,13 +4,16 @@ import com.example.Employee.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -23,26 +26,49 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
+        return http
                 .csrf(csrf -> csrf.disable())
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(
                                         "/api/auth/**",
-//                                "/users/register/**",
-//                                "/users/login",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
                                         "/v3/api-docs/**",
                                         "/v3/api-docs",
                                         "/swagger-resources/**",
-                                        "/webjars/**").permitAll()
+                                        "/webjars/**",
+                                        "/test/**",
+                                        "/actuator/**",
+                                        "/actuator/health",
+                                        "/actuator/info"
+                                ).permitAll()
+//                        .anyRequest().authenticated()
+                                // Employee APIs - USER and ADMIN
+                                .requestMatchers("/api/employees/**")
+                                .hasAnyRole("USER", "ADMIN")
+
+                                // Department APIs - ADMIN only
+                                .requestMatchers("/api/departments/**")
+                                .hasRole("ADMIN")
+
+                                // File APIs - USER and ADMIN
+                                .requestMatchers("/files/**")
+                                .hasAnyRole("USER", "ADMIN")
+
+                                // Everything else requires authentication
                                 .anyRequest().authenticated()
                 )
 
-                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
 
-        return http.build();
+                .build();
     }
 
     @Bean
